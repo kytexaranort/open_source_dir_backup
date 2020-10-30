@@ -1,0 +1,69 @@
+#### SOURCED FROM https://github.com/kytexaranort/open_source_dir_backup ####
+import os
+import time as time
+import shutil
+import csv
+backup_file_ini = "backup_ini/data"
+list_1 = []
+list_2 = []
+with open(backup_file_ini, 'r') as data_csv:
+	reader = csv.reader(data_csv)
+	for row in reader:
+		try:
+			list_1.append(row[0])
+			list_2.append(row[1])
+		except(IndexError):
+			pass
+data_num = 0
+for data1 in list_1:
+	for data2 in list_2:
+		COPY_SIZE = 0
+		DATA_SIZE = '0'
+		COPY_LIST = []
+		try:
+			total, used, free = shutil.disk_usage(str(list_1[data_num]))
+			print("Free Space: " + str(free))
+			if free >= 0:
+				if free >= 1024:
+					if free >= 1048576:
+						if free >= 1073741824:
+							if free >= 1099511627776:
+								FREE_SIZE = (str(free / 1099511627776) + " TeraBytes")
+							else:
+								FREE_SIZE = (str(free / 1073741824) + " GigaBytes")
+						else:
+							FREE_SIZE = (str(free / 1048576) + " MegaBytes")
+					else:
+						FREE_SIZE = (str(free / 1024) + " KiloBytes")
+				else:
+					FREE_SIZE = (str(free) + " Bytes")
+			else:
+				FREE_SIZE = ("No Data")
+			for root, dirs, files in os.walk(str(list_1[data_num])):
+				for Cf in files:
+					COPY_LIST_ADD = os.path.getsize(os.path.join(root, Cf))
+					COPY_LIST.append(COPY_LIST_ADD) 
+					print(COPY_LIST_ADD)
+			COPY_SIZE = sum(COPY_LIST)
+			print("Total: "+str(COPY_SIZE))
+			if COPY_SIZE >= 0:
+				if COPY_SIZE >= 1024:
+					if COPY_SIZE >= 1048576:
+						if COPY_SIZE >= 1073741824:
+							if COPY_SIZE >= 1099511627776:
+								DATA_SIZE = (str(COPY_SIZE / 1099511627776) + " TeraBytes")
+							else:
+								DATA_SIZE = (str(COPY_SIZE / 1073741824) + " GigaBytes")
+						else:
+							DATA_SIZE = (str(COPY_SIZE / 1048576) + " MegaBytes")
+					else:
+						DATA_SIZE = (str(COPY_SIZE / 1024) + " KiloBytes")
+				else:
+					DATA_SIZE = (str(COPY_SIZE) + " Bytes")
+			else:
+				DATA_SIZE = ("No Data")
+			print((str(list_1[data_num]) + '  ==>  ' + str(list_2[data_num]) + '      Free Space: ' + FREE_SIZE + "    Data Size: " + DATA_SIZE))
+			shutil.copytree(str(list_1[data_num]), (str(list_2[data_num]) + '/' + time.strftime("%m-%d-%Y")))
+			data_num = data_num + 1
+		except(IndexError):
+			pass
